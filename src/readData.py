@@ -37,10 +37,10 @@ def readPinchFromNP():
             #concatonating results and data
             result = pd.concat([df_emg, df_ann], axis=1).reindex(df_ann.index)
             result.columns = [0,1,2,3,4,5,6,7,8]
-            print(result.to_string())
+            #print(result.to_string())
             file.write(result.to_string())
             fin_res.append(result)
-            print(result.loc[result[8] == 'Pinch2'])
+            #print(result.loc[result[8] == 'Pinch2'])
 
             #exit() /1
     #print(fin_res)
