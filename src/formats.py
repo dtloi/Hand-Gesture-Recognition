@@ -8,14 +8,14 @@ def flattenForAverage(labels, data):
     segments = []
     flattenedLabels = []
     i = 1 #start at second element
-    print(len(labels))
+    #print(len(labels))
     while(i < len(labels)):
         if not(labels[i] == labels[i-1]):
             segments.append(i-1)
             flattenedLabels.append(labels[i-1])
         i+=1
         #print(i)
-    print(flattenedLabels) # turn this into a numpy array
+    #print(flattenedLabels) # turn this into a numpy array
     
     dataArray = np.zeros((1,8))
     i = 0
@@ -36,7 +36,7 @@ def flattenForAverage(labels, data):
         dataArray = np.append(dataArray, averagedSensors, axis=0)
         i+=1
     dataArray = np.delete(dataArray, 0, axis=0)
-    print(dataArray)
+    #print(dataArray)
 
     # at this point, the data just needs a bias column added
     # now we will set the labels
@@ -46,7 +46,7 @@ def flattenForAverage(labels, data):
         #print(labelSwitch(label))
         labelArray = np.append(labelArray, labelSwitch(label), axis=0)
     labelArray = np.delete(labelArray, 0, axis=0)
-    print(labelArray)
+    #print(labelArray)
 
     return [labelArray, dataArray]
 
