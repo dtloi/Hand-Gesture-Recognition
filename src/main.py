@@ -2,8 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import warnings
 
-from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Input, Dense, Dropout, Activation, Flatten
+# Uncomment for running on Windows
+# from tensorflow.python.keras.models import Sequential, Model
+# from tensorflow.python.keras.layers import Input, Dense, Dropout, Activation, Flatten
+
+# Uncomment for running on Mac
+# from tensorflow.keras.models import Sequential, Model
+# from tensorflow.keras.layers import Input, Dense, Dropout, Activation, Flatten
 
 from readData import readPinchFromNP
 
@@ -25,11 +30,11 @@ def main():
 
     input = Input(shape=(8,))
     x1 = Dense(128, activation='relu')(input)
-    x2 = Dense(64, activation='relu')(input)
-    x3 = Dense(32, activation='relu')(input)
-    x4 = Dense(16, activation='relu')(input)
-    x5 = Dense(8, activation='relu')(input)
-    x6 = Dense(5, activation='sigmoid')(input)
+    x2 = Dense(64, activation='relu')(x1)
+    x3 = Dense(32, activation='relu')(x2)
+    x4 = Dense(16, activation='relu')(x3)
+    x5 = Dense(8, activation='relu')(x4)
+    x6 = Dense(5, activation='sigmoid')(x5)
 
     model = Model(inputs=input, outputs=x6)
 
