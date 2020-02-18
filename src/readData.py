@@ -12,7 +12,7 @@ def readPinchFromNP():
     masterLabels = np.zeros((1,))
     masterData = np.zeros((1, 8))
     #fin_res = pd.DataFrame({})
-    for subject in range(1, 10):
+    for subject in range(1, 23):
         for session in range(1, 4): # for now we only want to look at one subject...
             #building the file name
             f_name = "../Pinch/subject"

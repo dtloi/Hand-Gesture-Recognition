@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import warnings
 
 # Uncomment for running on Windows
-from tensorflow.python.keras.models import Sequential, Model
-from tensorflow.python.keras.layers import Input, Dense, Dropout, Activation, Flatten, LSTM
+# from tensorflow.python.keras.models import Sequential, Model
+# from tensorflow.python.keras.layers import Input, Dense, Dropout, Activation, Flatten, LSTM
 
 # Uncomment for running on Mac
-# from tensorflow.keras.models import Sequential, Model
-# from tensorflow.keras.layers import Input, Dense, Dropout, Activation, Flatten
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Input, Dense, Dropout, Activation, Flatten, LSTM
 
 from readData import readPinchFromNP
 from formats import flattenForAverage, lstm
@@ -16,8 +16,8 @@ from formats import flattenForAverage, lstm
 warnings.filterwarnings('ignore') #we'll probably need to turn this back on
 
 def trylstm():
-    dataset = np.load('/temp/tripled.npy')
-    labels = np.load('/temp/tripled_label.npy')
+    dataset = np.load('./temp/tripled.npy')
+    labels = np.load('./temp/tripled_label.npy')
     #print(dataset.shape)
     #print(labels.shape)
     #print(dataset)
@@ -30,7 +30,7 @@ def trylstm():
     model.add(LSTM(units = 6, return_sequences = True))
 
     model.add(Dense(units = 5))
-    model.compile(optimizer = 'sgd', loss = 'binary_crossentropy', metrics =['accuracy'])
+    model.compile(optimizer = 'sgd', loss = 'binary_crossentropy', metrics =['acc'])
     history = model.fit(train_data, train_labels, epochs = 5, batch_size = 50, validation_split=0.2)
     
     train_loss, train_acc = model.evaluate(train_data, train_labels)
