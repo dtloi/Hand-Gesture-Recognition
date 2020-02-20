@@ -10,7 +10,7 @@ import warnings
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Input, Dense, Dropout, Activation, Flatten, LSTM
 
-from readData import readPinchFromNP
+from readData import readPinchFromNP, readRoshamboFromNP
 from formats import flattenForAverage, lstm
 
 warnings.filterwarnings('ignore') #we'll probably need to turn this back on
@@ -26,12 +26,13 @@ def trylstm():
     train_data, test_data = np.split(dataset, [800, ])
     
     model = Sequential()
-    model.add(LSTM(units = 7, return_sequences = True, input_shape = (train_data.shape[1], 8)))
+    model.add(LSTM(units = 8, return_sequences = True, input_shape = (train_data.shape[1], 8), kernel_initializer='random_uniform',))
     model.add(LSTM(units = 6, return_sequences = True))
-
-    model.add(Dense(units = 5))
+    model.add(LSTM(units = 6, return_sequences = True))
+    model.add(Dense(units = 8))
     model.compile(optimizer = 'sgd', loss = 'binary_crossentropy', metrics =['acc'])
-    history = model.fit(train_data, train_labels, epochs = 5, batch_size = 50, validation_split=0.2)
+    history = model.fit(dataset, labels, epochs = 5, batch_size = 50, validation_split=0.2)
+   
     
     train_loss, train_acc = model.evaluate(train_data, train_labels)
     test_loss, test_acc = model.evaluate(test_data, test_labels)
@@ -49,7 +50,6 @@ def trylstm():
     plt.show()
 
 
-
     # The history of our cross-entropy loss during training.
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
@@ -59,20 +59,39 @@ def trylstm():
     plt.legend(['train', 'test'], loc='upper right')
     plt.show()
 
-
-    plot_decision_boundary(test_data, test_labels, model) 
-    # Reset figure size back to default.
-    rcParams['figure.figsize'] = 6, 4
-
-    #
-    # This code is substantively from https://rohitmidha23.github.io/Neural-Network-Decision-Boundary/
-    #
-
 def main():
-    preprocessedData = readPinchFromNP()
-    labels = preprocessedData[0] # ((n, 5)) numpy array  of labels
-    data = preprocessedData[1] # ((n, 8)) numpy array of averages of every session
 
+
+    preprocessedPinchData = readPinchFromNP()
+    pinchLabels = preprocessedPinchData[0] # ((n, 5)) numpy array  of labels
+    pinchData = preprocessedPinchData[1] # ((n, 8)) numpy array of averages of every session
+
+    preprocessedRoshamboData = readRoshamboFromNP()
+    roshamboLabels = preprocessedRoshamboData[0] # ((n, 5)) numpy array  of labels
+    roshamboData = preprocessedRoshamboData[1] # ((n, 8)) numpy array of averages of every session
+    print(roshamboData.shape)
+
+    # i = 1
+    # size = 270177
+    # count = 0
+    # min = 240
+    # while (i < size):
+    #     if roshamboLabels[i] != roshamboLabels[i-1]:
+    #         #print(count)
+    #         if count < min:
+    #             min = count
+    #         count = 0
+    #     count += 1
+    #     i += 1
+    # print(min)
+    
+
+
+    labels = np.append(pinchLabels, roshamboLabels, axis = 0)
+    data = np.append(pinchData, roshamboData, axis = 0)
+
+
+    #you can comment this out if you already have the formatted data
     lstm(labels, data)
 
     trylstm()

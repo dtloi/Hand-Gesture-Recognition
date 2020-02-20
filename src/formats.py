@@ -44,33 +44,43 @@ def flattenForAverage(labels, data):
 
 
 def pinchOne():
-    return np.array([[1, 0, 0, 0, 0]])
+    return np.array([[1, 0, 0, 0, 0, 0, 0, 0]])
 def pinchTwo():
-    return np.array([[0, 1, 0, 0, 0]])
+    return np.array([[0, 1, 0, 0, 0, 0, 0, 0]])
 def pinchThree():
-    return np.array([[0, 0, 1, 0, 0]])
+    return np.array([[0, 0, 1, 0, 0, 0, 0, 0]])
 def pinchFour():
-    return np.array([[0, 0, 0, 1, 0]])
+    return np.array([[0, 0, 0, 1, 0, 0, 0, 0]])
+def rock():
+    return np.array([[0, 0, 0, 0, 1, 0, 0, 0]])
+def paper():
+    return np.array([[0, 0, 0, 0, 0, 1, 0, 0]])
+def scissor():
+    return np.array([[0, 0, 0, 0, 0, 0, 1, 0]])    
 def none():
-    return np.array([[0, 0, 0, 0, 1]])
+    return np.array([[0, 0, 0, 0, 0, 0, 0, 1]])
 
 def labelSwitch(label):
     switch = {
-        'Pinch1': pinchOne,
-        'Pinch2': pinchTwo,
-        'Pinch3': pinchThree,
-        'Pinch5': pinchFour,
-        'none': none,
+        'Pinch1' : pinchOne,
+        'Pinch2' : pinchTwo,
+        'Pinch3' : pinchThree,
+        'Pinch5' : pinchFour,
+        'rock'   : rock,
+        'paper'  : paper,
+        'scissor': scissor,
+        'none'   : none,
     }
-    func = switch.get(label, lambda: np.array([[0, 0, 0, 0, 0]]))
+    func = switch.get(label, lambda: np.array([[0, 0, 0, 0, 0, 0, 0, 0]]))
     return func()
 
-#MAX: 385 MIN: 241
+#MAX: 385 MIN: 24
 def lstm(labels, data):
-    masterData = np.zeros((1,240,8))
-    masterLabel = np.zeros((1,240,5))
+    minVal = 181
+    masterData = np.zeros((1,minVal,8))
+    masterLabel = np.zeros((1,minVal,8))
     print(masterData.shape)
-    labelArray = np.zeros((1, 5))
+    labelArray = np.zeros((1, 8))
     i = 1
     print(masterData) 
     max = 0
@@ -83,12 +93,12 @@ def lstm(labels, data):
         if not(labels[i] == labels[i-1]):
             smallTest = np.delete(smallTest, 0, axis=0)
             labelArray = np.delete(labelArray, 0, axis=0)
-            masterLabel = np.append(masterLabel, [labelArray[:240]], axis=0)
-            masterData = np.append(masterData, [smallTest[:240]], axis=0)
+            masterLabel = np.append(masterLabel, [labelArray[:minVal]], axis=0)
+            masterData = np.append(masterData, [smallTest[:minVal]], axis=0)
             print(masterData.shape)
             print(masterLabel.shape)
             smallTest = np.zeros((1,8))
-            labelArray = np.zeros((1,5))
+            labelArray = np.zeros((1,8))
         else:
             #counter += 1
             #print(counter)
