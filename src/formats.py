@@ -67,8 +67,8 @@ def labelSwitch(label):
 
 #MAX: 385 MIN: 241
 def lstm(labels, data):
-    masterData = np.zeros((1,241,8))
-    masterLabel = np.zeros((1,241,5))
+    masterData = np.zeros((1,240,8))
+    masterLabel = np.zeros((1,240,5))
     print(masterData.shape)
     labelArray = np.zeros((1, 5))
     i = 1
@@ -83,8 +83,8 @@ def lstm(labels, data):
         if not(labels[i] == labels[i-1]):
             smallTest = np.delete(smallTest, 0, axis=0)
             labelArray = np.delete(labelArray, 0, axis=0)
-            masterLabel = np.append(masterLabel, [labelArray[:241]], axis=0)
-            masterData = np.append(masterData, [smallTest[:241]], axis=0)
+            masterLabel = np.append(masterLabel, [labelArray[:240]], axis=0)
+            masterData = np.append(masterData, [smallTest[:240]], axis=0)
             print(masterData.shape)
             print(masterLabel.shape)
             smallTest = np.zeros((1,8))
