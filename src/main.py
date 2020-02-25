@@ -22,16 +22,17 @@ def trylstm():
     #print(labels.shape)
     #print(dataset)
     #print(labels)
-    train_labels, test_labels = np.split(labels, [800, ])
-    train_data, test_data = np.split(dataset, [800, ])
+    train_labels, test_labels = np.split(labels, [2478, ])
+    train_data, test_data = np.split(dataset, [2478, ])
     
     model = Sequential()
     model.add(LSTM(units = 8, return_sequences = True, input_shape = (train_data.shape[1], 8), kernel_initializer='random_uniform',))
-    model.add(LSTM(units = 6, return_sequences = True))
-    model.add(LSTM(units = 6, return_sequences = True))
+    model.add(LSTM(units = 64, return_sequences = True))
+    model.add(LSTM(units = 32, return_sequences = True))
+    model.add(LSTM(units = 16, return_sequences = True))
     model.add(Dense(units = 8))
     model.compile(optimizer = 'sgd', loss = 'binary_crossentropy', metrics =['acc'])
-    history = model.fit(dataset, labels, epochs = 5, batch_size = 50, validation_split=0.2)
+    history = model.fit(train_data, train_labels, epochs = 15, batch_size = 32, validation_split=0.2)
    
     
     train_loss, train_acc = model.evaluate(train_data, train_labels)
@@ -92,7 +93,7 @@ def main():
 
 
     #you can comment this out if you already have the formatted data
-    lstm(labels, data)
+    #lstm(labels, data)
 
     trylstm()
 
