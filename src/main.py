@@ -9,9 +9,10 @@ import warnings
 # Uncomment for running on Mac
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Input, Dense, Dropout, Activation, Flatten, LSTM
+from tensorflow.keras.utils import plot_model
 
 from readData import readPinchFromNP, readRoshamboFromNP
-from formats import flattenForAverage, lstm
+from formats import lstm
 
 warnings.filterwarnings('ignore') #we'll probably need to turn this back on
 
@@ -32,6 +33,8 @@ def trylstm():
     model.add(LSTM(units = 16, return_sequences = True))
     model.add(Dense(units = 8))
     model.compile(optimizer = 'sgd', loss = 'binary_crossentropy', metrics =['acc'])
+
+    
     history = model.fit(train_data, train_labels, epochs = 15, batch_size = 32, validation_split=0.2)
    
     
@@ -60,6 +63,15 @@ def trylstm():
     plt.legend(['train', 'test'], loc='upper right')
     plt.show()
 
+    plot_model(
+        model,
+        to_file='model.png',
+        show_shapes=True,
+        show_layer_names=True,
+        dpi=300)
+    return
+
+
 def main():
 
 
@@ -86,72 +98,12 @@ def main():
     #     i += 1
     # print(min)
     
-
-
     labels = np.append(pinchLabels, roshamboLabels, axis = 0)
     data = np.append(pinchData, roshamboData, axis = 0)
 
-
     #you can comment this out if you already have the formatted data
-    #lstm(labels, data)
-
+    #lstm(labels, data) #uncomment this if you want to reformat the data. This takes a while...
     trylstm()
-
-
-    # preprocessedData = readPinchFromNP()
-
-    # labels = preprocessedData[0] # ((n, 5)) numpy array  of labels
-    # data = preprocessedData[1] # ((n, 8)) numpy array of averages of every session
-
-    # train_labels, test_labels = np.split(labels, [2000, ])
-    # train_data, test_data = np.split(data, [2000, ])
-
-    # print(train_labels.shape)
-    # print(test_labels.shape)
-    # print(train_data.shape)
-    # print(test_data.shape)
-
-    # input = Input(shape=(8,))
-    # x1 = Dense(128, activation='relu')(input)
-    # x2 = Dense(64, activation='relu')(x1)
-    # x3 = Dense(32, activation='relu')(x2)
-    # x4 = Dense(16, activation='relu')(x3)
-    # x5 = Dense(8, activation='relu')(x4)
-    # x6 = Dense(5, activation='sigmoid')(x5)
-
-    # model = Model(inputs=input, outputs=x6)
-
-    # model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['acc'])
-
-    # history = model.fit(train_data, train_labels, validation_split=0.1, epochs=150, batch_size=32)
-
-    # train_loss, train_acc = model.evaluate(train_data, train_labels)
-    # test_loss, test_acc = model.evaluate(test_data, test_labels)
-
-    # print('Training set accuracy:', train_acc)
-    # print('Test set accuracy:', test_acc)
-
-    # model.summary()
-
-    # # The history of our accuracy during training.
-    # print(history.history.keys())
-    # plt.plot(history.history['acc'])
-    # plt.plot(history.history['val_acc'])
-    # plt.title('Model Accuracy')
-    # plt.ylabel('Accuracy')
-    # plt.xlabel('Number of epochs')
-    # plt.legend(['train', 'test'], loc='upper left')
-    # plt.show()
-
-    # # The history of our cross-entropy loss during training.
-    # plt.plot(history.history['loss'])
-    # plt.plot(history.history['val_loss'])
-    # plt.title('Model Loss')
-    # plt.ylabel('Loss')
-    # plt.xlabel('Number of epochs')
-    # plt.legend(['train', 'test'], loc='upper right')
-    # plt.show()
-
 
 if __name__ == "__main__":
     main()

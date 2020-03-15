@@ -1,48 +1,5 @@
 import numpy as np
 
-def flattenForAverage(labels, data):
-    segments = []
-    flattenedLabels = []
-    i = 1 #start at second element
-    #print(len(labels))
-    while(i < len(labels)):
-        if not(labels[i] == labels[i-1]):
-            segments.append(i-1)
-            flattenedLabels.append(labels[i-1])
-        i+=1
-        #print(i)
-    #print(flattenedLabels) # turn this into a numpy array
-    
-    dataArray = np.zeros((1,8))
-    i = 0
-    while(i < len(segments)):
-        if i == 0:
-            start = 0
-        else:
-            start = segments[i-1] + 1
-
-        size = segments[i]
-        averagedSensors = np.zeros((1,8))
-        
-        while(start < size):
-            averagedSensors = averagedSensors + data[start]
-            start+=1
-        averagedSensors = averagedSensors / (size - segments[i-1])
-        #print(size)
-        dataArray = np.append(dataArray, averagedSensors, axis=0)
-        i+=1
-    dataArray = np.delete(dataArray, 0, axis=0)
-    #print(dataArray)
-
-    # at this point, the data just needs a bias column added
-    # now we will set the labels
-    labelArray = np.zeros((1, 5))
-    labelArray = np.delete(labelArray, 0, axis=0)
-    #print(labelArray)
-
-    return [labelArray, dataArray]
-
-
 def pinchOne():
     return np.array([[1, 0, 0, 0, 0, 0, 0, 0]])
 def pinchTwo():
@@ -74,7 +31,6 @@ def labelSwitch(label):
     func = switch.get(label, lambda: np.array([[0, 0, 0, 0, 0, 0, 0, 0]]))
     return func()
 
-#MAX: 385 MIN: 24
 def lstm(labels, data):
     minVal = 181
     masterData = np.zeros((1,minVal,8))
