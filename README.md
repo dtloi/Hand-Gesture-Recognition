@@ -1,5 +1,6 @@
 ### How It Works
 
+[![How It Works](https://i.imgur.com/Jy2RIpw.jpg)]()
 
 ### Installation
 INSTRUCTIONS for ./src folder
